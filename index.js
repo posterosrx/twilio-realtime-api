@@ -61,7 +61,8 @@ fastify.get('/', async (request, reply) => {
 // Route for Twilio to handle incoming calls
 // <Say> punctuation to improve text-to-speech translation
 fastify.all('/incoming-call', async (request, reply) => {
-    console.log("\nIncoming Call..");
+    let host = (request.headers.host.indexOf("posterosrx.com") > 0)?request.headers.host+"/twilrtapi":request.headers.host;
+    console.log("\nIncoming Call.. from ", host);
     console.log("CallSid==>", request.body.CallSid,"\n\n\n");
     console.log("Caller==>", request.body.Caller);
     gConnections[request.body.CallSid] = request.body;
@@ -69,7 +70,7 @@ fastify.all('/incoming-call', async (request, reply) => {
                           <Response>
                               <!-- <Say>Hi there! How can I help you?</Say> -->
                               <Connect>
-                                  <Stream url="wss://${request.headers.host}/media-stream/${request.body.CallSid}" />
+                                  <Stream url="wss://${host}/media-stream/${request.body.CallSid}" />
                               </Connect>
                           </Response>`;
 
